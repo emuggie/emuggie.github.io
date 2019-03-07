@@ -1,8 +1,8 @@
----
-customjs:
-   - http://code.jquery.com/jquery-1.4.2.min.js
----
-<div>
+
+<div id="text">
    testing html tag
 </div>
 
+<script>
+document.getElementById("text").innerHTML = "Text added by JavaScript code";
+</script>

@@ -8,7 +8,7 @@ try{
 
 function switchLang(val){
 	Array.prototype.forEach.call(document.getElementsByTagName('*'),function(el){
-		if(!el.lang){
+		if(el.tagName.toUpperCase() =="HTML" || !el.lang){
 			return;
 		}
 		

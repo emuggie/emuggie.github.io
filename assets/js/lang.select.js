@@ -15,7 +15,7 @@ function switchLang(val){
 		for(var i=0; i < css.cssRules.length; i++)
 			css.deleteRule(0);
 		
-		css.insertRule('*[lang]:not([lang="'+val+'"]){	display : none;	}',0);
+		css.insertRule(':not(html)[lang]:not([lang="'+val+'"]){	display : none;	}',0);
 	});
 	currentLang = val;
 }

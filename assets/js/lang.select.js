@@ -7,16 +7,15 @@ try{
 }
 
 function switchLang(val){
-	Array.prototype.forEach.call(document.getElementsByTagName('*'),function(el){
-		if(el.tagName.toUpperCase() =="HTML" || !el.lang){
+	Array.prototype.forEach.call(document.styleSheets, function(css){
+		if(css.title != "langStyle"){
 			return;
 		}
 		
-		if(val.startsWith(el.lang)){
-			el.style.display = null;
-		}else{
-			el.style.display  = "none";
-		}
+		for(var i=0; i < css.cssRules.length; i++)
+			css.deleteRule(0);
+		
+		css.insertRule('*[lang]:not([lang="'+val+'"]){	display : none;	}',0);
 	});
 	currentLang = val;
 }

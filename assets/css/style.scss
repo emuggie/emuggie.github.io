@@ -2,3 +2,12 @@
 ---
 
 @import "jekyll-theme-minimal";
+
+#siteNav {
+    position : fixed;
+    witdh : 270px;
+    height : calc(100% - 320px);
+    top : 220px;
+    overflow-y : auto;
+}
+

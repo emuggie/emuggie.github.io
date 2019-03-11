@@ -1,10 +1,12 @@
-{% for category in site.categories %}
+{% for category in site.category-list %}
 <details>
 	<summary>{{ category }}</summary>
         <ul>
 	    {% for page in site.pages %}
+	    	{{ page.indexed }}
 		    {% if page.indexed == true %}
 			    {% for pageCategory in page.categories %}
+			    	{{ pageCategory }}
   					{% if category == pageCategory %}
 		    <li>
                 <a href="{{ page.url }}">

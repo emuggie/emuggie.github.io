@@ -1,14 +1,70 @@
 ---
 layout : default
 indexed : true
-title_en : Customizing Github Pages
-title_ko : 깃허브 페이지 커스터 마이징 
-categories : [dev]
+title_en : Creating personal Github Pages
+title_ko : 개인 깃허브 페이지 구성 
+categories : [dev, jekyll]
 ---
 
-<h2 lang="en">Customizing Github Pages</h2>
-<h2 lang="ko">깃허브 페이지 커스터 마이징</h2>
+<h2 lang="en">Creating personal Github Pages</h2>
+<h2 lang="ko">개인 깃허브 페이지 구성</h2>
 
-<p lang="en">I'm so glad that you have visited my page on purpose.<p>
-<p lang="ko">깃허브 페이지에서 메뉴를 관리하지 않고도 동적으로 추가되는 기능을 구현하였다.<p>
+<p lang="en">If you have visited this page trying to set up your personal blog or static pages with GitHub Pages,<p>
+	you probably looked for many methods you need. <p>
+<p lang="ko">만약 GitHub Pages로 개인 블로그나 정적 사이트를 구성하는 방법을 찾기 위해 이 페이지에 방문했다면, 
+	이미 GitHub Pages를 사용하기 위해 여러 가지를 알아보고 왔을 확률이 높을 것이다.</p>
 
+<p lang="en">So, let's skip intros, tutorials and try simple ways to compose personal GitHub Pages</p> 	
+<p lang="ko">그러므로 대략적인 소개와 튜토리얼은 생략하고, 개인 GitHub Pages를 구성하기 위해 간단한 방법으로 구성을 해보도록 하자.<p>
+
+<p lang="en">If you try Theme Chooser following basic GitHub Pages tutorial, you'll have index.md or README.md file in your repository </p>
+<p lang="ko">기본적인 GitHub Pages 튜토리얼을 따라 Theme Chooser를 사용하면 기본으로 index.md, README.md 파일을 repository에 생성해준다.<p>
+
+<p lang="en">To change chosen theme's layout, look for the theme in following link<p>
+<p lang="ko">우선 선택한 테마의 레이아웃을 수정하기 위해 다음 링크에서 해당 테마를 참고하였다.<p>
+
+<a href="https://github.com/pages-themes">https://github.com/pages-themes</a>
+
+<p lang="en">Download, modify default.html in chosen theme's _layouts directory, and push it into _layouts directory in your repository.</p>
+<p lang="ko">선택한 테마의 repository의 _layouts 디렉토리에 정의 된 default.html를 입맛에 맞게 수정한 후 개인 repository _layouts 디렉토리에 넣는다.</p>
+
+{% raw %}
+<p lang="en">If you want to compose your pages with header, footer, leftMenu.., split to separate *.md or *.html file,
+	 and declare {% include fileName %} at desired location. </p>
+<p lang="ko">좀 더 나아가 Header와 Footer, leftMenu 등으로 분리 하여 구성하려면 분리 할 부분을 _include에 *.md, *.html 확장자 파일로 생성 후,
+	원하는 위치에서 {% include 파일명 %}를 선언하여 레이아웃을 구성한다. </p>
+	
+<p lang="en">!!Caution {% include_relative } doesn't work at_layout directory, you should use {% include } instead.</p>
+<p lang="ko">!!주의 _layout에서는 {% include_relative } 구문이 동작하지 않으므로 {% include } 문을 사용해야 한다.</p>
+<a href="https://github.com/jekyll/jekyll/issues/3488">github.com : include_relative does not work with layout files </a>
+{% endraw %}
+
+<p lang="en">Now, let's create left categorized menu.</p>
+<p lang="ko"> 왼쪽의 카테고리별 메뉴를 구성한다.</p>
+
+<p lang="en">Following link shows how to create categorized links without maintaining set of links.</p>
+<p lang="ko">아래의 링크는 따로 링크 목록 관리없이 메뉴를 생성하는 방법을 보여준다.</p>
+
+<a href="https://stackoverflow.com/questions/17118551/generating-a-list-of-pages-not-posts-in-a-given-category">StackOverflow :generating-a-list-of-pages-not-posts-in-a-given-category </a>
+
+<p lang="en">While applying methods above, met following problems.</p>
+<p lang="ko">위의 방법을 인용하여 구성하던 중 다음과 같은 문제에 도달했다.</p>
+
+<p lang="en">!!Caution site.categories is preserved variable which derived from the directory structure. 
+	using site.categories will cause unexpected results.</p>
+<p lang="ko">!!주의 site.categories는 이미 예약된 변수로 _post 아래의 directory 구조에 따른 카테고리이다. 
+	site.categories를 사용하는 것은 예기치 못한 결과를 보인다.</p>
+
+<p lang="en">Layout is done, move on to design.</p>
+<p lang="ko">레이아웃을 구성하였으면 이제 디자인을 수정한다.</p>
+
+<p lang="en">You might already experienced that modifying layout requires several static resource such as stylesheets, javascript, images.
+To serve these kinds, create  asset/js, asset/css, asset/img directory in your respository.(Directory name is less relevent unless name contains '_' prefix.)</p>
+<p lang="ko">이미 레이아웃을 구성할 때 css, script 구성이 필요하게 되는 데, 이러한 정적 Resource를 제공 하기 위해,
+ 개인 repository에 asset/js, asset/css, asset/img 3개의 directory를 생성한다.( 이름은 큰 상관이 없으나 접근을 위해 directory 이름에 '_' prefix가 붙지 않도록 한다.)  </p>
+ 
+<p lang="en">After that, check index.md, index.html whether layout is properly set.</p>
+<p lang="ko">이후 index.md, index.html를 확인하여 레이아웃 및 구성이 제대로 되었는지 확인한 후 글을 작성한다.</p>
+
+<p lang="en">Using basic post directory is fine, but document path can be any directory and filenames.</p>
+<p lang="ko">글을 작성하는 경로는 기존 post를 사용해도 무방하나, URL에 내용을 명시하려는 목적이 있는 경우 따로  directory를 만들어 파일 이름을 직접 지정해도 된다.</p>

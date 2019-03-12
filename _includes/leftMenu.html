@@ -1,21 +1,24 @@
 {% for category in site.category-list %}
 <details>
-	<summary>{{ category }}</summary>
-        <ul>
-	    {% for page in site.pages %}
-		    {% if page.indexed == true %}
-			    {% for pageCategory in page.categories %}
-  					{% if category == pageCategory %}
-		    <li>
-                <a href="{{ page.url }}">
-                    <span lang="en">{{ page.title_en }}</span>
-                    <span lang="ko">{{ page.title_ko }}</span>
-                </a>
-            </li>
-  					{% endif %}
-			    {% endfor %}
-		    {% endif %}
-        {% endfor %}
-        </ul>
+	<summary>
+        <p lang="en">{{ category.name_en }}</p>
+        <p lang="ko">{{ category.name_ko }}</p>
+    </summary>
+    <ul>
+    {% for page in site.pages %}
+	    {% if page.indexed == true %}
+		    {% for pageCategory in page.categories %}
+				{% if category.tag == pageCategory %}
+	    <li>
+            <a href="{{ page.url }}">
+                <span lang="en">{{ page.title_en }}</span>
+                <span lang="ko">{{ page.title_ko }}</span>
+            </a>
+        </li>
+				{% endif %}
+		    {% endfor %}
+	    {% endif %}
+    {% endfor %}
+    </ul>
 </details>
 {% endfor %}

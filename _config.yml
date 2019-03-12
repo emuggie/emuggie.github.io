@@ -1,2 +1,6 @@
 theme : jekyll-theme-minimal
-category-list : [ dev ]
+category-list :
+    -
+        tag : jekyll
+        name_en : jekyll
+        name_ko : jekyll

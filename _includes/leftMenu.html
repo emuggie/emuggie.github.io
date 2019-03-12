@@ -1,9 +1,7 @@
 {% for category in site.category-list %}
 <details>
-	<summary>
-        <p lang="en">{{ category.name_en }}</p>
-        <p lang="ko">{{ category.name_ko }}</p>
-    </summary>
+	<summary lang="en">{{ category.name_en }}</summary>
+    <summary lang="ko">{{ category.name_ko }}</summary>
     <ul>
     {% for page in site.pages %}
 	    {% if page.indexed == true %}

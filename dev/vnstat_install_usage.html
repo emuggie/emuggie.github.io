@@ -11,8 +11,8 @@ categories : [ linux ]
 <h2 lang="en">Installing and using vnstat</h2>
 <h2 lang="ko">vnstat 설치와 사용</h2>
 
-<p lang="en">As service continues, monitoring network traffic seems nice.</p>
-<p lang="ko"></p>
+<p lang="en">Troubles I faced while setting vnstat on linux.</p>
+<p lang="ko">리눅스에서 vnstat 구성 중 맞게 된 문제들.</p>
 
 <h3 lang="en">Installation</h3>
 <h3 lang="ko">설치</h3>
@@ -59,12 +59,12 @@ categories : [ linux ]
 <p lang="ko">생성된 데이터베이스 파일은 다음의 경로에서 찾을 수 있다.:"&lt;network interface>"<p>
 
 <p lang="en">On devian, file ownrship is on user "vnstat" by default. But on Redhat Os, you should manually change ownership to vnstat. </p> 	
-<p lang="en">데비안에서는 파일 소유권한이 사용자 "vnstat"에게 있다. 하지만 Redhat Os에서는 수동으로 소유 권한을 변경해야 한다.</p>
+<p lang="ko">데비안에서는 파일 소유권한이 사용자 "vnstat"에게 있다. 하지만 Redhat Os에서는 수동으로 소유 권한을 변경해야 한다.</p>
 <div class="language-markdown highlighter-rouge">
 	<div class="highlight">
-		<pre class="highlight">
-			<code>$ chown -R vnstat:vnstat /var/lib/vnstat</code>
-		</pre>
+<pre class="highlight">
+<code>$ chown -R vnstat:vnstat /var/lib/vnstat</code>
+</pre>
 	</div>
 </div>
 

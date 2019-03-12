@@ -1,0 +1,93 @@
+---
+layout : default
+indexed : true
+title_en : vnstat. install and use.
+title_ko : vnstat. 설치 및 사용 
+desc_en : 
+desc_ko :
+categories : [ linux ]
+---
+
+<h2 lang="en">Installing and using vnstat</h2>
+<h2 lang="ko">vnstat 설치와 사용</h2>
+
+<p lang="en">As service continues, monitoring network traffic seems nice.</p>
+<p lang="ko"></p>
+
+<h3 lang="en">Installation</h3>
+<h3 lang="ko">설치</h3>
+
+<h4>[Redhat]Centos 7</h4>
+
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$ yum install epel-release</code>
+			<code>$ yum install vnstat</code>
+		</pre>
+	</div>
+</div>
+
+<h4>[Devian]Ubuntu</h4>
+
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$ sudo apt-get install vnstat</code>
+		</pre>
+	</div>
+</div>
+
+
+<h3 lang="en">Configure and run</h3>
+<h3 lang="ko">설정 및 실행</h3>
+
+<p lang="en">First, find target network interfaces which will be monitored. (You can list network interfaces with "ifconfig" command).</p> 	
+<p lang="ko">우선, 모니터링 될 대상 네트워크 인터페이스를 찾는다.(ifconfig 명령으로 나열 할 수 있다.)<p>
+
+<p lang="en">Create database for network interface by following command.</p> 	
+<p lang="ko">다음의 명령으로 네트워크 인터페이스에 대한 데이터베이스를 만든다.<p>
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$ vnstat --create -i &lt;network interface></code>
+		</pre>
+	</div>
+</div>
+
+<p lang="en">Created database file can be found on :"/var/lib/vnstat/&lt;network interface>".</p> 	
+<p lang="ko">생성된 데이터베이스 파일은 다음의 경로에서 찾을 수 있다.:"&lt;network interface>"<p>
+
+<p lang="en">On devian, file ownrship is on user "vnstat" by default. But on Redhat Os, you should manually change ownership to vnstat. </p> 	
+<p lang="en">데비안에서는 파일 소유권한이 사용자 "vnstat"에게 있다. 하지만 Redhat Os에서는 수동으로 소유 권한을 변경해야 한다.</p>
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$ chown -R vnstat:vnstat /var/lib/vnstat</code>
+		</pre>
+	</div>
+</div>
+
+<p lang="en">By default, vnstat service records network traffic every (Devian : 30 seconds, Redhat 5 minutes). Configuration file location : "/etc/vnstat.conf"</p>
+<p lang="ko">초기 설정으로 vnstat 서비스는 (Devian : 30초, Redhat :  5분)마다 네트워크 트래픽을 기록한다. 설정 파일 위치 :  "/etc/vnstat.conf"</p>
+
+<p lang="en">On devian, vnstat service is active by default. But on Redhat Os, you should start service manually </p> 	
+<p lang="ko">데비안에서는 vnstat 서비스가 기본적으로 활성화된다. 하지만 Redhat Os에서는 직접 서비스를 실행해야 한다.</p>
+
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$sudo systemctl start vnstat</code>
+		</pre>
+	</div>
+</div>
+
+<p lang="en">Type following command to monitor</p> 	
+<p lang="ko">다음 명령으로 모니터링 한다.</p>
+<div class="language-markdown highlighter-rouge">
+	<div class="highlight">
+		<pre class="highlight">
+			<code>$ vnstat</code>
+		</pre>
+	</div>
+</div>

@@ -4,3 +4,7 @@ category-list :
         tag : jekyll
         name_en : jekyll
         name_ko : jekyll
+    -
+        tag : linux
+        name_en : linux
+        name_ko : 리눅스

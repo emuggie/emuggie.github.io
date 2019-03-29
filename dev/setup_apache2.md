@@ -17,12 +17,12 @@ categories : [ linux ]
 <h3 lang="en">Installation</h3>
 <h3 lang="ko">설치</h3>
 
-###[Redhat]Centos 7
+### [Redhat]Centos 7
 ```markdown
 $ yum install httpd
 ```
 
-###[Devian]Ubuntu
+### [Devian]Ubuntu
 
 ```markdown
 $ sudo apt-get install apache2
@@ -34,10 +34,10 @@ $ sudo apt-get install apache2
 <p lang="en">Configration file path</p>
 <p lang="ko">설정 파일 경로</p>
 
-*/etc/httpd*
+**/etc/httpd**
 
 
-###[Redhat]Centos 7
+### [Redhat]Centos 7
 <p lang="en">If you use reverse proxy module, run the following command on the server to allow apache to make outbound connections.</p>
 <p lang="ko">만약 Reverse proxy 모듈을 사용할 경우, 아래 명령으로 apache가 외부 요청을 할 수 있도록 한다.</p>
 ```markdown

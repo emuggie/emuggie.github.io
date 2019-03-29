@@ -1,0 +1,132 @@
+#commentBox {
+	position : fixed;
+	width : 500px;
+	height : 50%;
+	bottom : 0px;
+	right : 0px;
+	padding :3px;
+	border : 1px solid;
+	transition: transform 500ms;
+	transform: translatey(5px);
+	background-color : white
+}
+
+#commentBox.hidden {
+	transform: translatey(calc(100% - 30px));
+}
+
+#commentBox .loadingLayer {
+	position : absolute;
+	width : 100%;
+	height: 100%;
+	background-color : grey;
+	opacity:0.6;
+	z-index : 99; 
+	pointer-events: none;
+	padding-left : 3px;
+}
+#commentBox .loadingLayer div:last-child{
+	text-align:center;
+}
+
+#commentBox .loadingLayer .fa-spinner{
+	font-size : 70px;
+	color : white;
+	opacity:1.0;
+	margin : auto;
+}
+
+#commentBox .loadingLayer button{
+	z-index : 999;
+	pointer-events: auto;
+	opacity:1.0; 
+}
+
+#commentBox .header {
+	position : relative;
+    margin-bottom : 3px;
+}
+
+#commentBox .header .button{
+	position : absolute;
+	right : 0px;
+	top : 0px;
+}
+#commentBox .header .button button{
+	width : 20px;
+	height :20px;
+	margin-left : 3px;
+	padding : 1px;
+}
+
+#commentBox .inputForm div{
+	margin-bottom : 5px;
+	position : relative;
+}
+
+#commentBox .inputForm input[type=text]
+, #commentBox .inputForm input[type=password] {
+	width : calc(50% - 10px);
+}
+
+#commentBox .inputForm textarea {
+	width: calc(100% - 6em);
+	resize : none;
+}
+
+#commentBox .inputForm button {
+	position : absolute;
+	right : 3px;
+	width:5em;
+	height: 90%;
+}
+
+#commentBox ul{
+    margin-block-start : 0px;
+    padding-inline-start: 0px;
+    list-style-type: none;
+    margin-block-end: 0em;
+    overflow-y : auto;
+    height : 75%;
+}
+   
+#commentBox p, h4{
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+}
+   
+#commentBox h4{
+	height: 0px;
+}
+
+#commentBox p button{
+	height: 100%;
+	margin-left : 3px;
+}
+
+#commentBox .commentList li {
+	position : relative;
+   	margin-bottom : 5px;
+   	border-top : 1px solid;
+}
+
+#commentBox .commentList h4.PSS_1 {	color : #e6194B; }
+#commentBox .commentList h4.PSS_2 {	color : #3cb44b; }
+#commentBox .commentList h4.PSS_3 {	color : #ffe119; }
+#commentBox .commentList h4.PSS_4 {	color : #4363d8; }
+#commentBox .commentList h4.PSS_5 {	color : #f58231; }
+#commentBox .commentList h4.PSS_6 {	color : #911eb4; }
+#commentBox .commentList h4.PSS_7 {	color : #42d4f4; }
+#commentBox .commentList h4.PSS_8 {	color : #f032e6; }
+#commentBox .commentList h4.PSS_9 {	color : #bfef45; }
+#commentBox .commentList h4.PSS_10 {color : #fabebe; }
+#commentBox .commentList h4.PSS_11 {color : #469990; }
+#commentBox .commentList h4.PSS_12 {color : #e6beff; }
+#commentBox .commentList h4.PSS_13 {color : #9A6324; }
+#commentBox .commentList h4.PSS_14 {color : #fffac8; }
+#commentBox .commentList h4.PSS_15 {color : #800000; }
+#commentBox .commentList h4.PSS_16 {color : #aaffc3; }
+#commentBox .commentList h4.PSS_17 {color : #808000; }
+#commentBox .commentList h4.PSS_18 {color : #ffd8b1; }
+#commentBox .commentList h4.PSS_19 {color : #000075; }
+#commentBox .commentList h4.PSS_20 {color : #a9a9a9; }

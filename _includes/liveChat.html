@@ -1,0 +1,183 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="/assets/css/commentBox.css">
+
+<script src="/assets/js/handlebars-v4.1.1.js"></script>
+
+<script type="text/javascript">
+	const RestAPI = function RestAPI(baseURI){
+		this.baseURI = baseURI;
+		
+		//초기화
+		this.reset = () => {
+			this.request = new XMLHttpRequest();
+		}
+		this.reset();
+		
+		//전송
+		this.send = (path, callback, data, method) => {
+			method = method || "GET";
+			data = data || new FormData();
+			// Precheck request status before send
+			if(this.request.readyState !== XMLHttpRequest.UNSENT 
+					&& this.request.readyState !== XMLHttpRequest.DONE){
+	            throw "Request Pending";
+	        }
+			this.request.open(method, this.baseURI + path, true);
+
+			this.request.onreadystatechange = () => {
+				// Error Handler of request Stage Change Event
+				if(this.request.readyState === XMLHttpRequest.DONE) {
+					// Dismiss loading layer
+					commentUI.showLoading(false);
+		            if (this.request.status === 200) {
+		            	callback(null, this.request.responseText);
+		            } else {
+		            	callback("ERROR:"+this.request.status, this.request.responseText);
+		            }
+		        }
+			};
+			// Display loading layer
+			commentUI.showLoading(true);
+			
+			this.request.send(data);
+		};
+		
+		// Get list of current post
+		this.get = callback => {
+			this.send("/comment/list/1", (error, data) => {
+				if(error){
+					callback(error, data);
+					return;
+				}
+				callback(error, JSON.parse(data))
+			});
+		};
+		
+		// Add new Comment
+		this.add = (formData , callback) => {
+			this.send("/comment/new/1"
+				, (error, data) => {
+					if(error){
+						callback(error, data);
+						return;
+					}
+					callback(error, JSON.parse(data))
+				}
+				, formData
+				, "POST");
+		};
+	}
+	
+	function CommentUI(){
+		// Show / hide comment box
+		this.toggle = button =>{
+			if(document.querySelector("#commentBox").classList.contains("hidden")){
+				document.querySelector("#commentBox").classList.remove("hidden");
+				button.classList.remove("fa-caret-square-up");
+				button.classList.add("fa-caret-square-down");
+				// Enable refresh button
+				button.previousElementSibling.disabled = false;
+				// Trigger refresh event
+				this.reload();
+				return;	
+			}
+			document.querySelector("#commentBox").classList.add("hidden");
+			button.classList.remove("fa-caret-square-down");
+			button.classList.add("fa-caret-square-up");
+			// Disable refresh button
+			button.previousElementSibling.disabled = true;
+		};
+		
+		this.showLoading = isVisible => {
+			document.querySelector("#commentBox .loadingLayer").hidden = !isVisible;
+		};
+		
+		this.addComment = (data) => {
+			if(!this.commentTemplate){
+				this.commentTemplate = Handlebars.compile(document.querySelector("#commentTemplate").innerHTML);
+			}
+			document.querySelector('#commentBox .commentList').innerHTML += this.commentTemplate(data);
+		}
+		
+		this.setComments = (data) => {
+			document.querySelector('#commentBox .commentList').innerHTML = "";
+			data.forEach(each => {
+				this.addComment(each);
+			});
+			if(data.length ==0){
+				this.addComment({comment : "No comments found."});
+			}
+		}
+		
+		this.reload = button => {
+			restApi.get((error, data) => {
+				if(error){
+					this.setComments([{comment:"Error : Failed connecting to server."}]);
+					return;
+				}
+				this.setComments(data);
+			});
+		};
+		
+		this.submit = () => {
+			var formData = new FormData(document.querySelector("#commentForm"));
+			if(!formData.get("username") || !formData.get("password") || !formData.get("comment")){
+				alert("name, password required");
+				return;
+			}
+			restApi.add(formData, (error, data) => {
+				if(error){
+					alert(error, data);
+					return;
+				}
+				this.setComments(data);
+				// Clear comment on submit success
+				document.querySelector("#commentForm textarea").value = "";
+			});
+		};
+	}
+	
+	const restApi = new RestAPI("http://localhost:3000");
+	const commentUI = new CommentUI();
+	
+</script>
+<img class="fas fa-spinner"/>
+<div id="commentBox" class="hidden">
+	<div class="loadingLayer" hidden>
+		<button class="far fa-window-close" onclick="commentUI.showLoading(false)"></button>
+		<div><p class="fas fa-spinner fa-spin"/></div>
+	</div>
+	<div class="header">
+	<i class="far fa-comments"></i>
+	<span>Comments</span>
+		<div class="button">
+			<button class="fas fa-sync-alt" onclick="commentUI.reload(this)" disabled/>
+			<button class="far fa-caret-square-up" onclick="commentUI.toggle(this)"/>
+		</div>
+	</div>
+    <div class="inputForm">
+		<form id="commentForm" method="POST">
+		<div>
+		    <input type="text" name="username" maxlength="10" placeholder="Name">
+			<input type="password" name="password" maxlength="10" placeholder="Password" autocomplete>
+		</div>
+		<div>
+			<textarea name="comment"></textarea>
+		    <button type="button" class="far fa-comment-dots" onclick="commentUI.submit(this);"/>
+	    </div>
+		</form>
+    </div>
+    
+    <ul class="commentList">
+    </ul>
+    
+    <template id="commentTemplate">
+    	<li>
+    		{% raw %}
+            <h4>{{username}}</h4><p align="right"><time datetime="{{tms}}">{{tms}}</time><button class="far fa-times-circle"></button></p>
+            <p>{{comment}}</p>
+            {% endraw %}
+        </li>
+    </template>
+    
+</div>

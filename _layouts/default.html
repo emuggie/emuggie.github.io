@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {% seo %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -27,17 +28,18 @@
            {% include leftMenu.html %}
         </nav>
       
-      <section>
-      {{ content }}
-      </section>
+		<section>
+			{{ content }}
+		</section>
       
-      <footer>
-      	{% include footer.html %}
-      </footer>
+		<footer>
+			{% include footer.html %}
+		</footer>
 
-        <aside>
+		<aside>
           	{% include liveChat.html %}
-        </aside>
+          	{% include userCookie.html %}
+		</aside>
     </div>
     
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>

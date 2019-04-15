@@ -1,0 +1,248 @@
+---
+layout : default
+indexed : true
+title_en : Peer to Peer Video streaming with Html5 
+title_ko : HTML 5를 이용한 peer to peer 비디오 스트리밍
+desc_en : 
+desc_ko :
+categories : [ html5 ]
+---
+<style>
+	video {
+		border : 2px solid;
+	}
+	
+	#remoteVid {
+		width : 600px;
+		height: 450px;
+	}
+	
+	#localVid {
+		width: 200px;
+		height: 150px;
+		position :absolute;
+		z-index : 99;
+	}
+	
+	.userListContainer {
+		border : 2px solid;
+		position : absolute;
+		top:0;
+		right: -100px;
+		width : 195px;
+		height: 450px;
+		overflow-y : auto;
+	}
+	.userListContainer button:first-child {
+		position : absolute;
+		top:0;
+		right:0;
+	}
+	
+	#userList, #userList * {
+		border : 1px solid;
+		margin : 0;
+		padding:0px;
+	}
+</style>
+
+<script type="module">
+	//const BaseDomain = "10.10.55.20:3000";
+	const BaseDomain = "emuggie-github-io.herokuapp.com";
+	import Rest from '/assets/js/rest.m.js';
+	import WS from '/assets/js/webSocket.m.js';
+	import Video from '/assets/js/video.m.js';
+
+	const rest = new Rest("https://"+BaseDomain, status => {
+		//loading layer 
+	});
+
+	const ws = new WS("ws://"+BaseDomain + "/video/ws", data => {	//onReceive
+		console.log(data);
+		var received = JSON.parse(data);
+		if(received.status != 'answered'){
+			return;
+		}
+
+		video.pc.setRemoteDescription(new RTCSessionDescription(received.info.desc))
+		.then(()=> { 
+			received.info.candidates.forEach(candidate => {
+				console.log(candidate);
+				video.pc.addIceCandidate(candidate)
+				.catch(err => {console.log(err)});
+			});
+		});
+	});
+
+	const video = new Video(() => {		//onWait status
+			console.log('onWait');
+			ws.connect().then( () => {
+				console.log('send ws');
+				ws.send(JSON.stringify({
+					candidates : video.pc.iceCandidates,
+					desc : video.pc.localDescription
+				}));
+			}).catch(err => { console.log(err)});
+		}, (wsId ,iceCandidates, localDescription) => {		//onConnect 	
+				rest.post("/video/signalBack/"+ wsId, (err, data) => {
+				console.log(err, data)
+			}, JSON.stringify({
+				candidates : iceCandidates,
+				desc : localDescription
+			}));
+		}, (type, gumStream) => {
+			if(type == 'local'){
+				var $localVid = document.querySelector("#localVid");
+				try{
+					$localVid.srcObject = gumStream;
+				}catch(e){
+					$localVid.src = window.URL.createObjectURL(gumStream);
+				}
+				$localVid.play();
+				return;
+			}
+			var $remoteVid = document.querySelector("#remoteVid");
+			$remoteVid.autoplay = true;
+			try{
+				$remoteVid.srcObject = gumStream;
+			}catch(e){
+				$remoteVid.src = URL.createObjectURL(gumStream);
+			}
+			$remoteVid.play();
+		}
+	);
+
+	video.mediaOptions = {
+		 video: false,
+		audio : false
+	};
+		
+	window.video = video;
+	window.rest = rest;
+</script>
+
+<script type="text/javascript">
+	function forceConnect(){
+		rest.get("/video/listWaits",(err, data) => {
+				console.log(err, data);
+				video.connect(
+					data[0].wsId
+					, data[0].desc
+					, data[0].candidates
+				);
+			}
+		);
+	}
+		
+	const ConnectionUI = function ConnectionUI(){
+		var container;
+		var template;
+		
+		this.getContainer = () => {
+			if(!container)
+				container = document.querySelector('#userList');
+			return container;
+		};
+		
+		this.getTemplate = data => {
+			if(!template)
+				template = Handlebars.compile(document.querySelector("#userTemplate").innerHTML);
+			return template(data);
+		};
+		
+		this.clear = () => {
+			this.getContainer().innerHTML = '';
+		};
+		
+		this.reload = () => {
+			rest.get("/video/listWaits", (err, data) => {
+				console.log(err, data);
+				this.clear();
+				this.userList = {};
+				data.forEach(each => {
+					this.userList[each.wsId] = each;
+					this.getContainer().innerHTML += this.getTemplate(each);
+				});
+				if(data.length ==0){
+					this.getContainer().innerHTML += this.getTemplate({comment : "No Users"});
+				}
+			});
+		};
+		
+		this.play = () => {
+			video.getStream();
+		};
+		
+		this.stop = () => {
+			video.stopStream();
+		};
+		
+		this.setMediaOptions = btn => {
+			if(btn.classList.contains("fa-video-slash")){
+				video.mediaOptions.video = {
+					width: { min: 200, ideal: 600, max: 1200 },
+					height: { min: 150, ideal: 450, max: 900 }
+				};
+				btn.classList.remove("fa-video-slash");
+				btn.classList.add("fa-video");
+			}else if(btn.classList.contains("fa-video")){
+				video.mediaOptions.video = false;
+				btn.classList.remove("fa-video");
+				btn.classList.add("fa-video-slash");
+			}else if(btn.classList.contains("fa-microphone-alt")){
+				video.mediaOptions.audio = false;
+				btn.classList.remove("fa-microphone-alt");
+				btn.classList.add("fa-microphone-alt-slash");
+			}else if(btn.classList.contains("fa-microphone-alt-slash")){
+				video.mediaOptions.audio = true;
+				btn.classList.remove("fa-microphone-alt-slash");
+				btn.classList.add("fa-microphone-alt");
+			}
+		};
+		
+		this.wait = () => {
+			video.waitPeer();
+		};
+		
+		this.connect = wsId => {
+			var data = this.userList[wsId];
+			video.connectPeer(
+				data.wsId
+				, data.desc
+				, data.candidates
+			);
+		}
+	}
+	const ui = new ConnectionUI();
+</script>
+<body>
+	<div style="position:relative">
+		<video id="localVid"></video>
+		<video id="remoteVid"></video>
+		<div class="userListContainer">
+			<button type="button" class="fas fa-sync-alt" onclick="ui.reload()"></button>
+	    	<button type="button" class="fas fa-podcast" onclick="ui.wait()">Wait for Peer</button>
+			<h4>User List</h4>
+			<ul id="userList">
+	    	</ul>
+    	</div>
+	</div>
+	
+	<button type="button" class="fas fa-video-slash" onclick="ui.setMediaOptions(this)">Video</button>
+	<button type="button" class="fas fa-microphone-alt-slash" onclick="ui.setMediaOptions(this)">Audio</button>
+	<br>
+	<button type="button" class="fas fa-play-circle" onclick="ui.play()">Play</button>
+	<button type="button" class="fas fa-stop-circle" onclick="ui.stop()">Stop</button>
+	<br>
+    
+	<template id="userTemplate">
+  		{% raw %}
+    	<li>
+            <h4>{{wsId}}</h4>
+            <p align="right"><time datetime="{{tms}}">{{tms}}</time></p>
+    		<button class="far fa-eye" onclick="ui.connect('{{wsId}}')">Connect</button>
+            
+        </li>
+		{% endraw %}
+    </template>
+		

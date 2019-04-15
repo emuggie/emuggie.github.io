@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="/assets/css/cookieUI.css">
+<script src="/assets/js/jcookie-v0.0.1.js"></script>
+
+<script tpye="text/javascript">
+	const cookieUI = new function CookieUI(){
+		this.getCookie = ()=>{
+			document.querySelector('.cookieUI input[name=username]').value = JCookies.get('username');	
+			document.querySelector('.cookieUI input[name=password]').value = JCookies.get('password');	
+        };
+        
+        this.setCookie = () => {
+        	if(!confirm('Browser stored username and password will be overwritten.\nContinue?'))
+        		return;
+        	this.username = document.querySelector('.cookieUI input[name=username]').value;
+        	this.password = document.querySelector('.cookieUI input[name=password]').value;
+    		JCookies.set('username', this.username);	
+    		JCookies.set('password', this.password);
+    		this.setCallback(this.username, this.password);
+    	};
+    	
+    	this.display = ()=> {
+    		this.getCookie();
+            document.querySelector(".cookieUI").hidden = false;            
+        };
+        
+        this.close = ()=> {
+            document.querySelector(".cookieUI").hidden = true;
+        }
+	}();
+</script>
+
+<div class="cookieUI" hidden>
+	<button type="button" class="far fa-window-close" onclick="cookieUI.close()">Close</button>
+	<div>
+		<div>
+			<label>User Name</label>
+			<input type="text" name="username" />
+		</div>
+		<div>
+			<label>Password</label>
+			<input type="password" name="password" />
+		</div>
+		<button type="button" onclick="cookieUI.setCookie()">
+			<i class="fas fa-cookie-bite"></i>Save
+		</button>
+	</div>
+</div>

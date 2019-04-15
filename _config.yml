@@ -8,3 +8,7 @@ category-list :
         tag : linux
         name_en : linux
         name_ko : 리눅스
+    -
+        tag : html5
+        name_en : HTML5
+        name_ko : HTML5

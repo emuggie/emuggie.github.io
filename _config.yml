@@ -1,4 +1,5 @@
 theme : jekyll-theme-minimal
+markdown : kramdown
 category-list :
     -
         tag : jekyll
